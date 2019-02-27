@@ -18,7 +18,7 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Identification utilisateur TOTO</h3>
+                <h3 class="panel-title">Identification utilisateur</h3>
             </div>
             <div class="panel-body">
                 <form role="form" method="post" 
