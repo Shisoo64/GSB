@@ -14,7 +14,8 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
 ?>
-<h2>Valider les fiches de frais</h2>
+
+<br>
 
 <div class="row">
     <div class="col-md-4">

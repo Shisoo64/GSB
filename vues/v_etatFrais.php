@@ -70,4 +70,14 @@
         }
         ?>
     </table>
+    
+    <form method="post" 
+              action="index.php?uc=etatFrais&action=genererPDF" 
+              role="form">
+            <fieldset>
+                <input name="lstMois" type="hidden" value="<?php echo $leMois ?>">
+                <button class="btn btn-success" type="submit">Telecharger</button>
+            </fieldset>
+        </form>
+    
 </div>

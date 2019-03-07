@@ -26,7 +26,7 @@ case 'selectionnerMois':
     $visiteurSelection = filter_input(INPUT_POST, 'lstVisiteur', FILTER_SANITIZE_STRING);
     $lesVisiteur = $pdo->getLesVisiteur();
     include 'vues/v_listeVisiteurSuivre.php';
-    $lesMois = $pdo->getLesMoisValide($visiteurSelection);
+    $lesMois = $pdo->getLesMoisDisponibles($visiteurSelection);
     include 'vues/v_listeMoisSuivre.php';
     break;
 
@@ -34,7 +34,7 @@ case 'voirEtatFrais':
     $lesVisiteur = $pdo->getLesVisiteur();
     $visiteurSelection = filter_input(INPUT_POST, 'lstVisiteur', FILTER_SANITIZE_STRING);
     include 'vues/v_listeVisiteurSuivre.php';
-    $lesMois = $pdo->getLesMoisEtat($visiteurSelection, 'VA');
+    $lesMois = $pdo->getLesMoisDisponibles($visiteurSelection);
     $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_STRING);   
     include 'vues/v_listeMoisSuivre.php';
     $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($visiteurSelection, $leMois);

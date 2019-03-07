@@ -122,6 +122,26 @@ case 'valideFiche':
     
     $montantTotal = 0;
     $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($visiteurId, $moisSelection);
+    $lesFraisForfait = $pdo->getLesFraisForfait($visiteurId, $moisSelection);
+    foreach ($lesFraisForfait as $unFraisForfait) {
+        $id = htmlspecialchars($unFraisForfait['idfrais']);
+        $quantite = $unFraisForfait['quantite'];
+        $montantF = $unFraisForfait['montant'];
+        $vehicule = $pdo->getVehicule($visiteurId);
+        if ($id == 'KM') {
+            if($vehicule == '4CV-D'){
+                $montantTotal += ($quantite * 0.52);
+            }else if($vehicule == '5CV-D'){
+                $montantTotal += ($quantite * 0.58);
+            }else if($vehicule == '4CV-E'){
+                $montantTotal += ($quantite * 0.62);
+            }else if($vehicule == '5CV-E'){
+                $montantTotal += ($quantite * 0.67);
+            }
+        }else {
+            $montantTotal += ($quantite * $montantF);
+        }
+    }
     foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
         $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
         $montant = $unFraisHorsForfait['montant'];
@@ -131,6 +151,7 @@ case 'valideFiche':
     }
     
     $pdo->valideFicheFrais($visiteurId, $moisSelection, $montantTotal);
+    include 'vues/v_accueil.php';
     break;
 
 }

@@ -76,7 +76,7 @@
                                     Valider les fiches de frais
                                 </a>
                             </li>
-                            <li <?php if ($uc == 'etatFrais') { ?>class="active"<?php } ?>>
+                            <li <?php if ($uc == 'suivrePaiementFrais') { ?>class="active"<?php } ?>>
                                 <a href="index.php?uc=suivrePaiementFrais&action=selectionnerVisiteur">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                     Suivre le paiement des fiches de frais

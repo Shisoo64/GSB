@@ -33,12 +33,13 @@ function estConnecte()
  *
  * @return null
  */
-function connecter($idVisiteur, $nom, $prenom, $comptable)
+function connecter($idVisiteur, $nom, $prenom, $comptable, $vehicule)
 {
     $_SESSION['idVisiteur'] = $idVisiteur;
     $_SESSION['nom'] = $nom;
     $_SESSION['prenom'] = $prenom;
     $_SESSION['comptable'] = $comptable;
+    $_SESSION['vehicule'] = $vehicule;
 }
 
 /**

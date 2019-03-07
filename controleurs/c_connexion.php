@@ -32,7 +32,8 @@ case 'valideConnexion':
         $nom = $visiteur['nom'];
         $prenom = $visiteur['prenom'];
         $comptable = $visiteur['comptable'];
-        connecter($id, $nom, $prenom, $comptable);
+        $vehicule = $visiteur['vehicule'];
+        connecter($id, $nom, $prenom, $comptable, $vehicule);
         header('Location: index.php');
     } else {
         ajouterErreur('Login ou mot de passe incorrect');

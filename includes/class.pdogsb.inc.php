@@ -38,10 +38,16 @@
 
 class PdoGsb
 {
-    private static $serveur = 'mysql:host=localhost';
-    private static $bdd = 'dbname=gsb_frais';
-    private static $user = 'userGsb';
-    private static $mdp = 'secret';
+    private static $serveur = 'mysql:host=weedealssugsb.mysql.db';
+    private static $bdd = 'dbname=weedealssugsb';
+    private static $user = 'weedealssugsb';
+    private static $mdp = 'Gsbfraisbdd1';
+    
+    //private static $serveur = 'mysql:host=localhost';
+    //private static $bdd = 'dbname=gsb_frais';
+    //private static $user = 'userGsb';
+    //private static $mdp = 'secret';
+    
     private static $monPdo;
     private static $monPdoGsb = null;
 
@@ -97,7 +103,8 @@ class PdoGsb
             . 'visiteur.nom AS nom, '
             . 'visiteur.prenom AS prenom, '
             . 'visiteur.mdpHashed AS mdpHashed, '
-            . 'visiteur.comptable AS comptable '
+            . 'visiteur.comptable AS comptable, '
+            . 'visiteur.vehicule AS vehicule '    
             . 'FROM visiteur '
             . 'WHERE visiteur.login = :unLogin'
         );
@@ -173,6 +180,7 @@ class PdoGsb
         $requetePrepare = PdoGSB::$monPdo->prepare(
             'SELECT fraisforfait.id as idfrais, '
             . 'fraisforfait.libelle as libelle, '
+            . 'fraisforfait.montant as montant, '
             . 'lignefraisforfait.quantite as quantite '
             . 'FROM lignefraisforfait '
             . 'INNER JOIN fraisforfait '
@@ -202,7 +210,16 @@ class PdoGsb
         return $requetePrepare->fetchAll();
     }
 
-    /* Passe un frais en Refusé */
+    /**
+     * Passe le statut d'un frais a Refusé
+     *
+     * @param String $idFrais L'id du frais a modifier
+     * @param String $idVisiteur  L'id du visiteur
+     * @param String $mois   Le mois du frais a modifier
+     * @param Array $lesFraisLibelle   Array contenant les libellés des frais
+     * 
+     * @return null
+     */
     public function modifieStatutRefuse($idFrais, $idVisiteur, $mois, $lesFraisLibelle) {
         $libelle = "REFUSE : " . $lesFraisLibelle[$idFrais];
         $requetePrepare = PdoGsb::$monPdo->prepare(
@@ -221,6 +238,15 @@ class PdoGsb
     
     /**
      * Met à jour les hors forfaits
+     * 
+     * @param String $idVisiteur  ID du visiteur
+     * @param String $mois   Mois sous la forme aaaamm
+     * @param String $idFrais ID du frais
+     * @param Array $lesFraisDate   Array contenant les dates des frais
+     * @param Array $lesFraisLibelle   Array contenant les libellés des frais
+     * @param Array $lesFraisMontant   Array contenant les montants des frais
+     * 
+     * @return null
      */
     public function majFraisHorsForfait($idVisiteur, $mois, $idFrais, $lesFraisDate, $lesFraisLibelle, $lesFraisMontant)
     {
@@ -333,6 +359,21 @@ class PdoGsb
         }
         return $boolReturn;
     }
+    
+    public function getVehicule($idVisiteur)
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT visiteur.vehicule AS vehicule '
+            . 'FROM visiteur '
+            . 'WHERE fichefrais.idvisiteur = :unIdVisiteur'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $laLigne = $requetePrepare->fetch();
+        $vehicule = $laLigne['vehicule'];
+        return $vehicule;
+    }
+    
 
     /**
      * Retourne le dernier mois en cours d'un visiteur
@@ -482,7 +523,14 @@ class PdoGsb
         return $lesMois;
     }
 
-    /* Retourne un tableau des mois avec l'id valide*/
+    /**
+     * Retourne un tableau des mois avec l'id indiqué
+     *
+     * @param String $idVisiteur ID du visiteur
+     * @param String $etat ID de l'état
+     *
+     * @return tableau des mois avec l'id indiqué
+     */
     public function getLesMoisEtat($idVisiteur, $etat)
     {
         $requetePrepare = PdoGSB::$monPdo->prepare(
@@ -562,8 +610,16 @@ class PdoGsb
         $requetePrepare->execute();
     }
     
-    
-        public function valideFicheFrais($idVisiteur, $mois, $montantTotal)
+    /**
+     * Valide une fiche de frais.
+     *
+     * @param String $idVisiteur    ID du visiteur
+     * @param String $mois          Mois sous la forme aaaamm
+     * @param String $montantTotal  Montant total de la fiche de frais
+     *
+     * @return null
+     */
+    public function valideFicheFrais($idVisiteur, $mois, $montantTotal)
     {
         $requetePrepare = PdoGSB::$monPdo->prepare(
             'UPDATE ficheFrais '
