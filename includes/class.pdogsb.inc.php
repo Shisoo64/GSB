@@ -38,15 +38,15 @@
 
 class PdoGsb
 {
-    private static $serveur = 'mysql:host=weedealssugsb.mysql.db';
-    private static $bdd = 'dbname=weedealssugsb';
-    private static $user = 'weedealssugsb';
-    private static $mdp = 'Gsbfraisbdd1';
+    //private static $serveur = 'mysql:host=weedealssugsb.mysql.db';
+    //private static $bdd = 'dbname=weedealssugsb';
+    //private static $user = 'weedealssugsb';
+    //private static $mdp = 'Gsbfraisbdd1';
     
-    //private static $serveur = 'mysql:host=localhost';
-    //private static $bdd = 'dbname=gsb_frais';
-    //private static $user = 'userGsb';
-    //private static $mdp = 'secret';
+    private static $serveur = 'mysql:host=localhost';
+    private static $bdd = 'dbname=gsb_frais';
+    private static $user = 'userGsb';
+    private static $mdp = 'secret';
     
     private static $monPdo;
     private static $monPdoGsb = null;
@@ -191,25 +191,6 @@ class PdoGsb
         );
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
-        $requetePrepare->execute();
-        return $requetePrepare->fetchAll();
-    }
-    
-    /**
-     * Retourne le montant kilomètrique pour le type de véhicule passé en paramètre
-     *
-     * @param String $vehicule type de vehicule
-     *
-     * @return le montant kilomètrique pour le type de véhicule passé en paramètre
-     */
-    public function montantVehicule($vehicule)
-    {
-        $requetePrepare = PdoGsb::$monPdo->prepare(
-            'SELECT fraisforfait.montant as montant '
-            . 'FROM fraisforfait '
-            . 'WHERE fraisforfait.libelle = :vehicule '
-        );
-        $requetePrepare->bindParam(':vehicule', $vehicule, PDO::PARAM_STR);
         $requetePrepare->execute();
         return $requetePrepare->fetchAll();
     }
@@ -381,18 +362,39 @@ class PdoGsb
     
     public function getVehicule($idVisiteur)
     {
+        
         $requetePrepare = PdoGsb::$monPdo->prepare(
-            'SELECT visiteur.vehicule AS vehicule '
+            'SELECT visiteur.vehicule AS vehicule '    
             . 'FROM visiteur '
-            . 'WHERE fichefrais.idvisiteur = :unIdVisiteur'
+            . 'WHERE visiteur.id = :unIdVisiteur'
         );
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->execute();
+        
         $laLigne = $requetePrepare->fetch();
-        $vehicule = $laLigne['vehicule'];
-        return $vehicule;
+        return $laLigne['vehicule'];
     }
     
+        /**
+     * Retourne le montant kilomètrique pour le type de véhicule passé en paramètre
+     *
+     * @param String $vehicule type de vehicule
+     *
+     * @return le montant kilomètrique pour le type de véhicule passé en paramètre
+     */
+    public function montantVehicule($vehicule)
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT fraisforfait.montant as montant '
+            . 'FROM fraisforfait '
+            . 'WHERE fraisforfait.libelle = :vehicule '
+        );
+        $requetePrepare->bindParam(':vehicule', $vehicule, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        
+        $laLigne = $requetePrepare->fetch();
+        return $laLigne['montant'];
+    }
 
     /**
      * Retourne le dernier mois en cours d'un visiteur
