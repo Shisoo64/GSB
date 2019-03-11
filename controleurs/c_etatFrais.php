@@ -77,6 +77,8 @@ case 'genererPDF':
     $pdf->Cell(100,6,'Fiche de frais du : ' . $numMois . '-' . $numAnnee,0,1,'L',true);
     $pdf->Ln(1);
     $pdf->SetTextColor(0,0,0);
+    $pdf->Write(5,utf8_decode('Nom : ' . $_SESSION['prenom'] . ' ' . $_SESSION['nom']));
+    $pdf->Ln();
     $pdf->Write(5,utf8_decode('Etat : ' . $libEtat . ' depuis le ' . $dateModif));
     $pdf->Ln();
     $pdf->Write(5,utf8_decode('Montant validé : ' . $montantValide));

@@ -129,15 +129,7 @@ case 'valideFiche':
         $montantF = $unFraisForfait['montant'];
         $vehicule = $pdo->getVehicule($visiteurId);
         if ($id == 'KM') {
-            if($vehicule == '4CV-D'){
-                $montantTotal += ($quantite * 0.52);
-            }else if($vehicule == '5CV-D'){
-                $montantTotal += ($quantite * 0.58);
-            }else if($vehicule == '4CV-E'){
-                $montantTotal += ($quantite * 0.62);
-            }else if($vehicule == '5CV-E'){
-                $montantTotal += ($quantite * 0.67);
-            }
+            $montantTotal += ($quantite * $pdo->montantVehicule($vehicule));
         }else {
             $montantTotal += ($quantite * $montantF);
         }

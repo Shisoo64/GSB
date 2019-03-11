@@ -194,6 +194,25 @@ class PdoGsb
         $requetePrepare->execute();
         return $requetePrepare->fetchAll();
     }
+    
+    /**
+     * Retourne le montant kilomètrique pour le type de véhicule passé en paramètre
+     *
+     * @param String $vehicule type de vehicule
+     *
+     * @return le montant kilomètrique pour le type de véhicule passé en paramètre
+     */
+    public function montantVehicule($vehicule)
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT fraisforfait.montant as montant '
+            . 'FROM fraisforfait '
+            . 'WHERE fraisforfait.libelle = :vehicule '
+        );
+        $requetePrepare->bindParam(':vehicule', $vehicule, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetchAll();
+    }
 
     /**
      * Retourne tous les id de la table FraisForfait
